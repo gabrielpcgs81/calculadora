@@ -1,0 +1,51 @@
+*{
+    padding:0;
+    margin:0;
+}
+
+body{
+    background-color: rgb(211,211,211);
+}
+
+main{
+    height: 60%;
+    width: 30%;
+    background-color: rgb(56, 56, 56);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    border-radius:20px;
+}
+
+#visor{
+    background-color: rgb(93, 145, 93);
+    width: 80%;
+    height: 15%;
+    margin:10% 10%;
+    border-radius: 10px;
+    padding:5px;
+    align-content: baseline;
+    font-size:5vh;
+    overflow: hidden;
+}
+
+#visor span{
+    display:inline;
+}
+
+#buttons{
+    display:grid;
+    margin:5% 10%;
+    display:flex;
+    flex-wrap: wrap;
+    height: 55%;
+}
+button{
+    margin:1%;
+    width: 18%;
+    background-color: red;
+    font-size:larger;
+    font-weight: bolder;
+}
