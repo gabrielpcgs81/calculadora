@@ -28,7 +28,22 @@ main{
     padding:5px;
     align-content: baseline;
     font-size:5vh;
-    overflow: hidden;
+    display:flex;
+    flex-direction: column;
+}
+
+#visor #ultimo{
+    background-color: red;
+    width: 100%;
+    height: 40%;
+    font-size:large;
+    font-weight: bold;
+}
+
+#visor #atual{
+    background-color: yellow;
+    width: 100%;
+    height: 60%;
 }
 
 #visor span{
