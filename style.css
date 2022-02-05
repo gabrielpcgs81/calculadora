@@ -49,3 +49,11 @@ button{
     font-size:larger;
     font-weight: bolder;
 }
+
+.number{
+    background-color: rgba(211,211,211,1);
+}
+
+.operation{
+    background-color: rgb(185, 120, 66);
+}
