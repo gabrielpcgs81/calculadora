@@ -1,3 +1,7 @@
+var memory = null;
+var answer = 0;
+var last_op = null;
+
 const wrapper = document.getElementById('buttons');
 
 wrapper.addEventListener('click', (event) => {
@@ -6,33 +10,68 @@ wrapper.addEventListener('click', (event) => {
         return;
     }
 
+    const visor = document.getElementById('atual');
+    valor_atual = visor.textContent;
+
     var key = event.target.className;
 
     switch (key) {
         case 'number':
-            console.log(key);
             display_atual(event.target.textContent);
             break;
         case 'dot':
-            console.log(key);
             display_atual(event.target.textContent);
             break;
         case 'clear':
+            last_op = null;
+            answer = 0;
             clear_atual();
             clear_ultimo();
-            console.log(key);
             break;
         case 'operation sum':
-            add(event.target.textContent);
+            test_first('+')
+            answer = calc(answer, valor_atual);
+            last_op = '+';
+            clear_atual();
+            clear_ultimo();
+            display_ultimo(answer);
             break;
         case 'operation sub':
-            subtract(event.target.textContent);
+            test_first('-')
+            answer = calc(answer, valor_atual);
+            last_op = '-';
+            clear_atual();
+            clear_ultimo();
+            display_ultimo(answer);
             break;
         case 'operation mult':
-            multiply(event.target.textContent);
+            test = test_first('*')
+            if (test == true) answer = calc(1, valor_atual);
+            else answer = calc(answer, valor_atual);
+            last_op = '*';
+            clear_atual();
+            clear_ultimo();
+            display_ultimo(answer);
             break;
         case 'operation div':
-            divide(event.target.textContent);
+            test_first('/')
+            answer = calc(answer, valor_atual);
+            last_op = '/';
+            clear_atual();
+            clear_ultimo();
+            display_ultimo(answer);
+            break;
+        case 'equal':
+            answer = calc(answer, valor_atual);
+            clear_atual();
+            clear_ultimo();
+            display_ultimo(answer);
+            break;
+        case 'memory':
+            calc_memory(event.target.textContent);
+            break;
+        case 'ans':
+            display_atual(answer)
             break;
         //clear();
     }
@@ -58,74 +97,31 @@ function clear_ultimo() {
     visor.textContent = '';
 }
 
-function add(text) {
-    const ultimo = document.getElementById('ultimo').textContent;
-    if (ultimo == '') {
-        const atual = document.getElementById('atual').textContent;
-        display_ultimo(atual);
-        clear_atual();
-    }
-    else {
-        const atual = document.getElementById('atual').textContent;
-        a = parseInt(atual, 10);
-        u = parseInt(ultimo, 10);
-        sum = a + u;
-        clear_ultimo();
-        display_ultimo(sum);
-        clear_atual();
+function test_first(op) {
+    if (last_op == null) {
+        last_op = op;
+        return true;
     }
 }
 
-function subtract(text) {
-    const ultimo = document.getElementById('ultimo').textContent;
-    if (ultimo == '') {
-        const atual = document.getElementById('atual').textContent;
-        display_ultimo(atual);
-        clear_atual();
-    }
-    else {
-        const atual = document.getElementById('atual').textContent;
-        a = parseInt(atual, 10);
-        u = parseInt(ultimo, 10);
-        sum = u - a;
-        clear_ultimo();
-        display_ultimo(sum);
-        clear_atual();
+function calc(a, b) {
+    switch (last_op) {
+        case '+':
+            return parseInt(a, 10) + parseInt(b, 10);
+        case '-':
+            return parseInt(a, 10) - parseInt(b, 10);
+        case '*':
+            return parseInt(a, 10) * parseInt(b, 10);
+        case '/':
+            return parseInt(a, 10) / parseInt(b, 10);
     }
 }
 
-function multiply(text) {
-    const ultimo = document.getElementById('ultimo').textContent;
-    if (ultimo == '') {
-        const atual = document.getElementById('atual').textContent;
-        display_ultimo(atual);
-        clear_atual();
+function calc_memory(text) {
+    if (text == 'MRC') window.alert("MRC");
+    else if (text == 'M+') {
+        const visor = document.getElementById('atual');
+        memory = visor.textContent;
     }
-    else {
-        const atual = document.getElementById('atual').textContent;
-        a = parseInt(atual, 10);
-        u = parseInt(ultimo, 10);
-        sum = a * u;
-        clear_ultimo();
-        display_ultimo(sum);
-        clear_atual();
-    }
-}
-
-function divide(text) {
-    const ultimo = document.getElementById('ultimo').textContent;
-    if (ultimo == '') {
-        const atual = document.getElementById('atual').textContent;
-        display_ultimo(atual);
-        clear_atual();
-    }
-    else {
-        const atual = document.getElementById('atual').textContent;
-        a = parseInt(atual, 10);
-        u = parseInt(ultimo, 10);
-        sum = u / a;
-        clear_ultimo();
-        display_ultimo(sum);
-        clear_atual();
-    }
+    else memory = null;
 }
