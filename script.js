@@ -1,26 +1,22 @@
 var memory = null;
 var answer = 0;
 var last_op = null;
+var on = true;
 
-const wrapper = document.getElementById('buttons');
+var button_onoff = document.getElementsByClassName('on_off')[0];
+button_onoff.addEventListener('click', ligar);
 
-wrapper.addEventListener('click', (event) => {
-    const isButton = event.target.nodeName === 'BUTTON';
-    if (!isButton) {
-        return;
-    }
 
+function processador(text_content, class_name) {
     const visor = document.getElementById('atual');
     valor_atual = visor.textContent;
 
-    var key = event.target.className;
-
-    switch (key) {
+    switch (class_name) {
         case 'number':
-            display_atual(event.target.textContent);
+            display_atual(text_content);
             break;
         case 'dot':
-            display_atual(event.target.textContent);
+            display_atual(text_content);
             break;
         case 'clear':
             last_op = null;
@@ -30,52 +26,77 @@ wrapper.addEventListener('click', (event) => {
             break;
         case 'operation sum':
             test_first('+')
-            answer = calc(answer, valor_atual);
-            last_op = '+';
-            clear_atual();
-            clear_ultimo();
-            display_ultimo(answer);
+            if (last_op != '=') {
+                answer = calc(answer, valor_atual);
+                last_op = '+';
+                clear_atual();
+                clear_ultimo();
+                display_ultimo(answer);
+            }
+            else {
+                last_op = '+';
+                answer = calc(answer, 0);
+            }
             break;
         case 'operation sub':
             test_first('-')
-            answer = calc(answer, valor_atual);
-            last_op = '-';
-            clear_atual();
-            clear_ultimo();
-            display_ultimo(answer);
+            if (last_op != '=') {
+                answer = calc(answer, valor_atual);
+                last_op = '-';
+                clear_atual();
+                clear_ultimo();
+                display_ultimo(answer);
+            }
+            else {
+                last_op = '-';
+                answer = calc(answer, 0);
+            }
             break;
         case 'operation mult':
             test = test_first('*')
-            if (test == true) answer = calc(1, valor_atual);
-            else answer = calc(answer, valor_atual);
-            last_op = '*';
-            clear_atual();
-            clear_ultimo();
-            display_ultimo(answer);
+            if (last_op != '=') {
+                if (test == true) answer = calc(1, valor_atual);
+                else answer = calc(answer, valor_atual);
+                last_op = '*';
+                clear_atual();
+                clear_ultimo();
+                display_ultimo(answer);
+            }
+            else {
+                last_op = '*';
+                answer = calc(answer, 1);
+            }
             break;
         case 'operation div':
             test_first('/')
-            answer = calc(answer, valor_atual);
-            last_op = '/';
-            clear_atual();
-            clear_ultimo();
-            display_ultimo(answer);
+            if (last_op != '=') {
+                answer = calc(valor_atual, 1);
+                last_op = '/';
+                clear_atual();
+                clear_ultimo();
+                display_ultimo(answer);
+            }
+            else {
+                last_op = '/';
+                answer = calc(answer, 1);
+            }
             break;
         case 'equal':
             answer = calc(answer, valor_atual);
+            last_op = '=';
             clear_atual();
             clear_ultimo();
             display_ultimo(answer);
             break;
         case 'memory':
-            calc_memory(event.target.textContent);
+            calc_memory(text_content);
             break;
         case 'ans':
             display_atual(answer)
             break;
         //clear();
     }
-})
+}
 
 function display_atual(text) {
     const visor = document.getElementById('atual');
@@ -124,4 +145,34 @@ function calc_memory(text) {
         memory = visor.textContent;
     }
     else memory = null;
+}
+
+function ligar() {
+    console.log('entrei aqui para ligar')
+    const btns = document.querySelectorAll('button');
+    btns.forEach(btn => {
+        if (btn.innerHTML != 'ON/OFF') {
+            btn.addEventListener('click', event => {
+                processador(event.target.textContent, event.target.className);
+            }, true);
+        }
+        var button_onoff = document.getElementsByClassName('on_off')[0];
+        button_onoff.removeEventListener('click', ligar, false);
+        button_onoff.addEventListener('click', desligar);
+    });
+}
+
+function desligar() {
+    console.log('entrei aqui pra desligar');
+    const btns = document.querySelectorAll('button');
+    btns.forEach(btn => {
+        if (btn.innerHTML != 'ON/OFF') {
+            btn.removeEventListener('click', event => {
+                processador;
+            }, false);
+        }
+        var button_onoff = document.getElementsByClassName('on_off')[0];
+        button_onoff.removeEventListener('click', desligar, false);
+        button_onoff.addEventListener('click', ligar);
+    });
 }
