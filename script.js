@@ -70,18 +70,21 @@ function processador(event) {
             }
             break;
         case 'operation div':
-            test_first('/');
+            var test = test_first('/');
             if (last_op != '=' && last_op != '/') {
-                console.log('teste 1');
-                answer = calc(valor_atual, 1);
-                last_op = '/';
-                clear_atual();
-                clear_ultimo();
-                display_ultimo(answer);
+                if (test == true) {
+                    console.log('teste 1');
+                    last_op = '*';
+                    answer = calc(valor_atual, 1);
+                    last_op = '/';
+                    clear_atual();
+                    clear_ultimo();
+                    display_ultimo(answer);
+                }
             } else if (last_op == '/') {
                 console.log('teste 2');
                 answer = calc(answer, valor_atual);
-                console.log(answer.toString());
+                clear_ultimo();
                 display_ultimo(answer);
                 clear_atual();
             } else {
@@ -130,7 +133,9 @@ function clear_ultimo() {
 
 function test_first(op) {
     if (last_op == null) {
-        last_op = op;
+        if (op != '/') {
+            last_op = op;
+        }
         return true;
     }
 }
