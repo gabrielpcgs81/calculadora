@@ -1,4 +1,4 @@
-var memory = null;
+var memory = 0;
 var answer = 0;
 var last_op = null;
 var on = true;
@@ -117,8 +117,14 @@ function display_atual(text) {
 }
 
 function display_ultimo(text) {
-    const visor = document.getElementById('ultimo');
+    const visor = document.getElementById('ultimo_numero');
     visor.textContent = visor.textContent + text;
+}
+
+function display_memoria() {
+    clear_memoria();
+    const visor = document.getElementById('memoria');
+    visor.textContent = 'M';
 }
 
 function clear_atual() {
@@ -127,7 +133,12 @@ function clear_atual() {
 }
 
 function clear_ultimo() {
-    const visor = document.getElementById('ultimo');
+    const visor = document.getElementById('ultimo_numero');
+    visor.textContent = '';
+}
+
+function clear_memoria() {
+    const visor = document.getElementById('memoria');
     visor.textContent = '';
 }
 
@@ -154,12 +165,30 @@ function calc(a, b) {
 }
 
 function calc_memory(text) {
-    if (text == 'MRC') window.alert("MRC");
-    else if (text == 'M+') {
+    if (text == 'MR') {
+        display_memoria();
+        clear_atual();
         const visor = document.getElementById('atual');
-        memory = visor.textContent;
+        display_atual(memory);
+        console.log(memory);
     }
-    else memory = null;
+    else if (text == 'MC') {
+        memory = 0;
+        clear_memoria();
+        console.log(memory);
+    }
+    else if (text == 'M+') {
+        display_memoria();
+        const visor = document.getElementById('atual');
+        memory = parseInt(visor.textContent, 10) + memory;
+        console.log(memory);
+    }
+    else {
+        display_memoria();
+        const visor = document.getElementById('atual');
+        memory = memory - parseInt(visor.textContent, 10);
+        console.log(memory);
+    }
 }
 
 function ligar() {

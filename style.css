@@ -38,13 +38,23 @@ main{
     font-family: seven_seg;
 }
 
-#visor #ultimo{
+#ultimo{
     width: 100%;
     height: 40%;
     font-size:x-large;
     font-weight: bold;
     align-content: center;
     vertical-align: middle;
+    display: flex;
+    justify-content: space-between;
+}
+
+#ultimo_numero{
+    width: 40%;
+}
+
+#memoria{
+    width: 15%;
 }
 
 #visor #atual{
