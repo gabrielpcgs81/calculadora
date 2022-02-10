@@ -7,7 +7,9 @@ var button_onoff = document.getElementsByClassName('on_off')[0];
 button_onoff.addEventListener('click', ligar);
 
 
-function processador(text_content, class_name) {
+function processador(event) {
+    text_content = event.target.textContent;
+    class_name = event.target.className;
     const visor = document.getElementById('atual');
     valor_atual = visor.textContent;
 
@@ -68,15 +70,23 @@ function processador(text_content, class_name) {
             }
             break;
         case 'operation div':
-            test_first('/')
-            if (last_op != '=') {
+            test_first('/');
+            if (last_op != '=' && last_op != '/') {
+                console.log('teste 1');
                 answer = calc(valor_atual, 1);
                 last_op = '/';
                 clear_atual();
                 clear_ultimo();
                 display_ultimo(answer);
-            }
-            else {
+            } else if (last_op == '/') {
+                console.log('teste 2');
+                answer = calc(answer, valor_atual);
+                console.log(answer.toString());
+                display_ultimo(answer);
+                clear_atual();
+            } else {
+                console.log('teste 3');
+                clear_ultimo();
                 last_op = '/';
                 answer = calc(answer, 1);
             }
@@ -149,12 +159,11 @@ function calc_memory(text) {
 
 function ligar() {
     console.log('entrei aqui para ligar')
+    button_onoff.style.backgroundColor = "green";
     const btns = document.querySelectorAll('button');
     btns.forEach(btn => {
         if (btn.innerHTML != 'ON/OFF') {
-            btn.addEventListener('click', event => {
-                processador(event.target.textContent, event.target.className);
-            }, true);
+            btn.addEventListener('click', processador, false);
         }
         var button_onoff = document.getElementsByClassName('on_off')[0];
         button_onoff.removeEventListener('click', ligar, false);
@@ -164,15 +173,19 @@ function ligar() {
 
 function desligar() {
     console.log('entrei aqui pra desligar');
+    button_onoff.style.backgroundColor = "red";
+    last_op = null;
+    answer = 0;
+    clear_atual();
+    clear_ultimo();
     const btns = document.querySelectorAll('button');
     btns.forEach(btn => {
         if (btn.innerHTML != 'ON/OFF') {
-            btn.removeEventListener('click', event => {
-                processador;
-            }, false);
+            btn.removeEventListener('click', processador, false);
         }
         var button_onoff = document.getElementsByClassName('on_off')[0];
         button_onoff.removeEventListener('click', desligar, false);
         button_onoff.addEventListener('click', ligar);
     });
 }
+
