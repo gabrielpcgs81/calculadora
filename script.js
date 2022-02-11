@@ -2,12 +2,14 @@ var memory = 0;
 var answer = 0;
 var last_op = null;
 var on = true;
+var expression = '';
 
 var button_onoff = document.getElementsByClassName('on_off')[0];
 button_onoff.addEventListener('click', ligar);
 
 
 function processador(event) {
+
     text_content = event.target.textContent;
     class_name = event.target.className;
     const visor = document.getElementById('atual');
@@ -15,12 +17,11 @@ function processador(event) {
 
     switch (class_name) {
         case 'number':
-            display_atual(text_content);
-            break;
-        case 'dot':
+            expression = expression + text_content + ' ';
             display_atual(text_content);
             break;
         case 'clear':
+            expression = '';
             last_op = null;
             answer = 0;
             clear_atual();
@@ -39,10 +40,18 @@ function processador(event) {
                 last_op = '+';
                 answer = calc(answer, 0);
             }
+            expression = expression + last_op + ' ';
             break;
         case 'operation sub':
-            test_first('-')
-            if (last_op != '=') {
+            test = test_first('-')
+            if (test == true) {
+                answer = calc(valor_atual, answer);
+                last_op = '-';
+                clear_atual();
+                clear_ultimo();
+                display_ultimo(answer);
+            }
+            else if (last_op != '=') {
                 answer = calc(answer, valor_atual);
                 last_op = '-';
                 clear_atual();
@@ -53,6 +62,7 @@ function processador(event) {
                 last_op = '-';
                 answer = calc(answer, 0);
             }
+            expression = expression + last_op + ' ';
             break;
         case 'operation mult':
             test = test_first('*')
@@ -68,6 +78,7 @@ function processador(event) {
                 last_op = '*';
                 answer = calc(answer, 1);
             }
+            expression = expression + 'x ';
             break;
         case 'operation div':
             var test = test_first('/');
@@ -93,6 +104,7 @@ function processador(event) {
                 last_op = '/';
                 answer = calc(answer, 1);
             }
+            expression = expression + last_op + ' ';
             break;
         case 'equal':
             answer = calc(answer, valor_atual);
@@ -100,6 +112,8 @@ function processador(event) {
             clear_atual();
             clear_ultimo();
             display_ultimo(answer);
+            expression = expression + ' = ' + answer;
+            console.log(expression);
             break;
         case 'memory':
             calc_memory(text_content);
@@ -109,6 +123,7 @@ function processador(event) {
             break;
         //clear();
     }
+    display_expression(expression);
 }
 
 function display_atual(text) {
@@ -125,6 +140,17 @@ function display_memoria() {
     clear_memoria();
     const visor = document.getElementById('memoria');
     visor.textContent = 'M';
+}
+
+function display_expression(expression) {
+    clear_expression();
+    const express = document.getElementById('expression');
+    express.textContent = expression;
+}
+
+function clear_expression() {
+    const express = document.getElementById('expression');
+    express.textContent = '';
 }
 
 function clear_atual() {
@@ -154,13 +180,13 @@ function test_first(op) {
 function calc(a, b) {
     switch (last_op) {
         case '+':
-            return parseInt(a, 10) + parseInt(b, 10);
+            return parseFloat(a) + parseFloat(b);
         case '-':
-            return parseInt(a, 10) - parseInt(b, 10);
+            return parseFloat(a) - parseFloat(b);
         case '*':
-            return parseInt(a, 10) * parseInt(b, 10);
+            return parseFloat(a) * parseFloat(b);
         case '/':
-            return parseInt(a, 10) / parseInt(b, 10);
+            return parseFloat(a) / parseFloat(b);
     }
 }
 
@@ -180,13 +206,13 @@ function calc_memory(text) {
     else if (text == 'M+') {
         display_memoria();
         const visor = document.getElementById('atual');
-        memory = parseInt(visor.textContent, 10) + memory;
+        memory = parseFloat(visor.textContent) + memory;
         console.log(memory);
     }
     else {
         display_memoria();
         const visor = document.getElementById('atual');
-        memory = memory - parseInt(visor.textContent, 10);
+        memory = memory - parseFloat(visor.textContent);
         console.log(memory);
     }
 }
